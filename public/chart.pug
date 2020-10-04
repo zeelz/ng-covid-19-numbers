@@ -1,0 +1,154 @@
+doctype html
+html
+	head
+		meta(charset='UTF-8')
+		meta(name='viewport', content='width=device-width, initial-scale=1')
+		title COVID-19 Numbers by Zeelz
+		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css')
+		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.6.0/tailwind.min.css')
+		link(rel='stylesheet', href='./style.css')
+		link(href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap", rel="stylesheet")
+	body
+		include _facemask
+		.min-w-screen.min-h-screen.bg-gray-200.flex.items-center.justify-center.px-5.py-5
+			.w-full.max-w-2xl(style="z-index: 1")
+				h1(class="font-bold my-10 text-4xl text-center", style="-webkit-background-clip: text;background-image: linear-gradient(45deg, red, orange 26%, #48bb78 90%);-webkit-text-fill-color: transparent;color: #250db4;font-family:'Ubuntu',sans-serif;") #COVID19Nigeria Overview
+				.-mx-2(class='flex')
+					
+					.w-full.px-2(class='w-1/2')
+						.rounded-lg.shadow-sm.mb-4
+							.rounded-lg.bg-white.shadow-lg.relative.overflow-hidden(class='md:shadow-xl')
+								.px-3.pt-8.pb-10.text-center.relative.z-10
+									h4.text-sm.uppercase.text-gray-500.leading-tight New Cases
+									h3.text-3xl.text-gray-700.font-semibold.leading-tight.my-3 #{newcases}
+									p.text-xs.text-green-500.leading-tight ▲ 1.40%
+								.absolute.bottom-0.inset-x-0
+									canvas#chart1(height='70')
+					.w-full.px-2(class='w-1/2')
+						.rounded-lg.shadow-sm.mb-4
+							.rounded-lg.bg-white.shadow-lg.relative.overflow-hidden(class='md:shadow-xl')
+								.px-3.pt-8.pb-10.text-center.relative.z-10
+									h4.text-sm.uppercase.text-gray-500.leading-tight Total Confirmed
+									h3.text-3xl.text-gray-700.font-semibold.leading-tight.my-3 #{infected}								
+								.absolute.bottom-0.inset-x-0
+									canvas#chart0(height='70')
+				.-mx-2(class='flex')
+					.w-full.px-2(class='w-1/2')
+						.rounded-lg.shadow-sm.mb-4
+							.rounded-lg.bg-white.shadow-lg.relative.overflow-hidden(class='md:shadow-xl')
+								.px-3.pt-8.pb-10.text-center.relative.z-10
+									h4.text-sm.uppercase.text-gray-500.leading-tight Discharged
+									h3.text-3xl.text-gray-700.font-semibold.leading-tight.my-3 #{recovered}
+									p.text-xs.text-green-500.leading-tight ▲ 8.73%
+								.absolute.bottom-0.inset-x-0
+									canvas#chart2(height='70')
+					.w-full.px-2(class='w-1/2')
+						.rounded-lg.shadow-sm.mb-4
+							.rounded-lg.bg-white.shadow-lg.relative.overflow-hidden(class='md:shadow-xl')
+								.px-3.pt-8.pb-10.text-center.relative.z-10
+									h4.text-sm.uppercase.text-gray-500.leading-tight Deaths
+									h3.text-3xl.text-gray-700.font-semibold.leading-tight.my-3 #{deceased - 3+3}
+									p.text-xs.text-green-500.leading-tight ▲ 1.40%
+								.absolute.bottom-0.inset-x-0
+									canvas#chart3(height='70')
+				div(class="my-10 flex justify-between")
+					a(href="https://github.com/zeelz/", class="tracking-widest uppercase", style="-webkit-background-clip: text;background-image: linear-gradient(45deg, red, orange 26%, #48bb78 90%); -webkit-text-fill-color: transparent;") © Zeelz
+					p.tracking-widest.uppercase(style='-webkit-background-clip: text;background-image: linear-gradient(45deg, red, orange 26%, #48bb78 90%); -webkit-text-fill-color: transparent;') ▲▼ 7 Days
+			+facemask.blob-wrapper
+			div(class="blob-wrapper__")
+				svg(viewBox="0 0 150 150", xmlns="http://www.w3.org/2000/svg")
+					path(fill='url(#zgradient)', d='M58.1,-34.3C71.3,-10.7,75.3,17.6,64.1,35.6C52.8,53.6,26.4,61.5,1.9,60.4C-22.6,59.3,-45.1,49.2,-51.2,34.2C-57.2,19.1,-46.7,-0.9,-35.4,-23.4C-24.1,-45.9,-12,-71,5.2,-74C22.4,-77,44.9,-57.9,58.1,-34.3Z', transform='translate(70 80)')
+		svg(style="width:0;height:0;position:absolute;",aria-hidden="true",focusable="false")
+			linearGradient(id="zgradient",x2="1",y2="1")
+				stop(offset="0%",stop-color="#d4fc79")
+				stop(offset="50%",stop-color="#aada3d")
+				stop(offset="100%",stop-color="#48bb78")
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		script.
+			const chartOptions = {
+			    maintainAspectRatio: false,
+			    legend: {
+			        display: false,
+			    },
+			    tooltips: {
+			        enabled: false,
+			    },
+			    elements: {
+			        point: {
+			            radius: 0
+			        },
+			    },
+			    scales: {
+			        xAxes: [{
+			            gridLines: false,
+			            scaleLabel: false,
+			            ticks: {
+			                display: false
+			            }
+			        }],
+			        yAxes: [{
+			            gridLines: false,
+			            scaleLabel: false,
+			            ticks: {
+			                display: false,
+			                suggestedMin: 0,
+			                suggestedMax: 10
+			            }
+			        }]
+			    }
+			};
+			//
+			var ctx = document.getElementById('chart1').getContext('2d');
+			var chart = new Chart(ctx, {
+			    type: "line",
+			    data: {
+			        labels: [1, 2, 8, 9, 5, 4, 7],
+			        datasets: [
+			            {
+			                backgroundColor: "rgba(101, 116, 205, 0.1)",
+			                borderColor: "rgba(101, 116, 205, 0.8)",
+			                borderWidth: 2,
+			                data: [56177, 56256, 56388, 56478, 56604, 56735, 56956],
+			            },
+			        ],
+			    },
+			    options: chartOptions
+			});
+			//
+			var ctx = document.getElementById('chart2').getContext('2d');
+			var chart = new Chart(ctx, {
+			    type: "line",
+			    data: {
+			        labels: [2, 3, 2, 9, 7, 7, 4],
+			        datasets: [
+			            {
+			                backgroundColor: "rgba(175, 254, 140, 0.1)",
+			                borderColor: "rgba(175, 254, 140, 0.8)",
+			                borderWidth: 2,
+			                data: [44088, 44152, 44337, 44430, 47872, 48092, 48305],
+			            },
+			        ],
+			    },
+			    options: chartOptions
+			});
+			//
+			var ctx = document.getElementById('chart3').getContext('2d');
+			var chart = new Chart(ctx, {
+			    type: "line",
+			    data: {
+			        labels: [2, 5, 1, 3, 2, 6, 7],
+			        datasets: [
+			            {
+			                backgroundColor: "rgba(246, 153, 63, 0.1)",
+			                borderColor: "rgba(246, 153, 63, 0.8)",
+			                borderWidth: 2,
+			                data: [1078, 1082, 1083, 1088, 1091, 1093, 1094],
+			            },
+			        ],
+			    },
+			    options: chartOptions
+			});
+
+		script(src='./main.js', type='text/javascript' )
