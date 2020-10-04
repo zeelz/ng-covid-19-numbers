@@ -22,5 +22,5 @@ jobs:
         docker build -t ng-covid:$TAG .
         docker tag ng-covid:$TAG zeelz/ng-covid19:$TAG
         docker tag ng-covid:$TAG gcr.io/civil-forge-282605/ng-covid:$TAG
-        docker login -u _json_key -p $GCR_TOKEN
+        echo $GCR_TOKEN | docker login -u _json_key --password-stdin gcr.io
         docker push gcr.io/civil-forge-282605/ng-covid:$TAG
