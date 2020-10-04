@@ -1,3 +1,6 @@
 node_modules/
 .DS_Store
 actions-examples.yml
+gcr-sa-key.json
+docker2gcr.yml
+docker2hub.yml
