@@ -15,4 +15,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build --tag ng-covid-19-numbers:$(date +%s) .
+      run: |
+        docker build -t ng-covid:0.3 .
+        docker tag ng-covid:0.3 zeelz/ng-covid19:0.3
+        docker login -u zeelz -p bb56003f-4a9a-40fc-91be-774d937775af
+        docker push zeelz/ng-covid19:0.3
