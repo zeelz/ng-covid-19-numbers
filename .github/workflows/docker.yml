@@ -14,12 +14,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
+    - name: Build and Push Docker image
       env:
         DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
         TAG: '0.4'
       run: |
-        docker build -t ng-covid:$TAG .
-        docker tag ng-covid:$TAG zeelz/ng-covid19:$TAG
-        docker login -u zeelz -p $DOCKER_TOKEN
-        docker push zeelz/ng-covid19:$TAG
+        cat gcr-sa-key.json | docker login -u _json_key --password-stdin https://gcr.io
