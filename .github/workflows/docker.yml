@@ -15,9 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-    env:
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-      TAG: '0.4'
+      env:
+        DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        TAG: '0.4'
       run: |
         docker build -t ng-covid:$TAG .
         docker tag ng-covid:$TAG zeelz/ng-covid19:$TAG
